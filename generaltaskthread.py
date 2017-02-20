@@ -28,7 +28,7 @@ class TaskThread(Thread):
         self.wati_for_task = Event()
         self.wati_for_stop = Event()
         # Dump msg
-        self.debug = False
+        self.debug = True
 
     def debug_log(self, msg, prefixname = False, postfixname = False):
         if self.debug:
@@ -79,6 +79,7 @@ class TaskThread(Thread):
         self.__qlock.release()
         self.wati_for_task.set()
         self.wati_for_task.clear()
+        return task.taskid
 
     def canceltask(self, taskid):
         self.debug_log("canceling task(%d) in ..."%(taskid), postfixname = True)
