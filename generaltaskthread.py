@@ -45,6 +45,7 @@ class TaskThread(Thread):
     def run(self):
         self.log(">>>>> TT : start running ...", prefixname = True)
         while True:
+            # If there's not pending task, wait to avoid busy-looping.
             if len(self.tasks) == 0:
                 self.wati_for_task.wait()
 
@@ -52,6 +53,7 @@ class TaskThread(Thread):
             if self.wati_for_stop.isSet():
                 break
 
+            # Remove a pending task from the queue.
             self.__qlock.acquire()
             task = self.tasks.pop(0)
             self.__qlock.release()
@@ -74,6 +76,7 @@ class TaskThread(Thread):
 
     def addtask(self, task):
         self.debug_log("adding task(%d) to ..."%(task.taskid), postfixname = True)
+        # TODO : Add priority re-order for tasks.
         self.__qlock.acquire()
         self.tasks.append(task)
         self.__qlock.release()
