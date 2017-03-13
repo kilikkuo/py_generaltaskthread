@@ -1,5 +1,5 @@
 from threading import Thread, Event, Lock, current_thread
-from logger import *
+from .logger import Logger
 
 class Task(Logger):
     __id = 0
